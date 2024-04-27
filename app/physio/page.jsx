@@ -82,8 +82,6 @@ const PhysioFetch = () => {
         }
     };
 
-
-
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
         const filteredContacts = contacts.filter(contact =>
@@ -93,25 +91,11 @@ const PhysioFetch = () => {
         setSearchResults(filteredContacts);
     };
 
-    const fetchContacts = async () => {
-        try {
-            const response = await fetch('/api/contact');
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            return [];
-        }
-    };
-
     return (
         <div className="container mx-auto p-5">
             <div className="flex items-center justify-between">
                 <h1 className="text-5xl font-semibold mb-8 text-center mt-5">Physio Form Data</h1>
-                <Link href="/" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Registration Form</Link>
+                <Link href="/" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded'>Registration Form</Link>
             </div>
             <div className="mb-4">
                 <input type="text" value={searchTerm} onChange={handleSearch} placeholder="Search by name or phone number" className="border border-gray-300 rounded-md px-3 py-2 w-full" />
@@ -119,60 +103,47 @@ const PhysioFetch = () => {
             {loading ? (
                 <p>Loading...</p>
             ) : searchResults.length > 0 ? (
-                <div className="grid grid-cols-2 gap-8">
-                    {searchResults.map((contact, index) => (
-                        <div key={index} className="rounded-lg">
-                            <table className="w-full mb-4">
-                                <tbody>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Full Name:</td>
-                                        <td className="px-4 py-2">{contact.fullname}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Phone:</td>
-                                        <td className="px-4 py-2">{contact.phone}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Email:</td>
-                                        <td className="px-4 py-2">{contact.email}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Gender:</td>
-                                        <td className="px-4 py-2">{contact.gender}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Age:</td>
-                                        <td className="px-4 py-2">{contact.age}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Degree:</td>
-                                        <td className="px-4 py-2">{contact.degree}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Designation:</td>
-                                        <td className="px-4 py-2">{contact.designation}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Organization:</td>
-                                        <td className="px-4 py-2">{contact.organization}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Experience:</td>
-                                        <td className="px-4 py-2">{contact.experience}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Elderly:</td>
-                                        <td className="px-4 py-2">{contact.elderly}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 font-semibold">Targets:</td>
-                                        <td className="px-4 py-2">{contact.targets}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEdit(contact)}>Edit</button>
-                        </div>
-                    ))}
+                <div className="rounded-lg">
+                    <table className="w-full mb-4">
+                        <thead>
+                            <tr>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">S.No</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Full Name</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Phone</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Email</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Gender</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Age</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Degree</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Designation</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Organization</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Experience</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Elderly</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Targets</th>
+                                <th className="px-2 py-2 font-semibold bg-gray-200">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {searchResults.map((contact, index) => (
+                                <tr key={index}>
+                                    <td className="px-2 py-2">{index + 1}</td>
+                                    <td className="px-2 py-2">{contact.fullname}</td>
+                                    <td className="px-2 py-2">{contact.phone}</td>
+                                    <td className="px-2 py-2">{contact.email}</td>
+                                    <td className="px-2 py-2">{contact.gender}</td>
+                                    <td className="px-2 py-2">{contact.age}</td>
+                                    <td className="px-2 py-2">{contact.degree}</td>
+                                    <td className="px-2 py-2">{contact.designation}</td>
+                                    <td className="px-2 py-2">{contact.organization}</td>
+                                    <td className="px-2 py-2">{contact.experience}</td>
+                                    <td className="px-2 py-2">{contact.elderly}</td>
+                                    <td className="px-2 py-2">{contact.targets}</td>
+                                    <td className="px-2 py-2">
+                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded" onClick={() => handleEdit(contact)}>Edit</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                     {editingContact && (
                         <div id="editSection" className="border border-gray-400 rounded-lg p-4 bg-gray-200">
                             <h2 className="text-xl font-semibold mb-4">Edit Details</h2>
@@ -199,7 +170,7 @@ const PhysioFetch = () => {
                                 <input type="text" id="elderly" name="elderly" value={editedData.elderly || ''} onChange={handleChange} className="border border-gray-300 rounded-md px-3 py-2" />
                                 <label htmlFor="targets">Targets:</label>
                                 <input type="text" id="targets" name="targets" value={editedData.targets || ''} onChange={handleChange} className="border border-gray-300 rounded-md px-3 py-2" />
-                                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded col-span-2">Save Changes</button>
+                                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded col-span-2">Save Changes</button>
                             </form>
                         </div>
                     )}
@@ -212,3 +183,4 @@ const PhysioFetch = () => {
 };
 
 export default PhysioFetch;
+
