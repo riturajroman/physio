@@ -1,13 +1,12 @@
 import connectDB from "@/app/lib/mongodb";
 import Contact from "@/app/models/contact";
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 export async function POST(req) {
-  const { fullname, phone, email, gender, age, degree, designation, organization, experience, elderly, targets } = await req.json();
+  const { fullname, phone, email, status, experience } = await req.json();
 
   try {
     await connectDB();
@@ -18,19 +17,15 @@ export async function POST(req) {
       return NextResponse.json({ msg: ["Phone number must be unique."] });
     }
 
-    await Contact.create({ fullname, phone, email, gender, age, degree, designation, organization, experience, elderly, targets });
+    // Set default experience to 0 if status is "Studying"
+    const defaultExperience = status === "Studying" ? 0 : experience;
 
-    // Call nodemailer function on successful submission
-    await sendEmail(fullname, email, {
+    await Contact.create({
+      fullname,
       phone,
-      gender,
-      age,
-      degree,
-      designation,
-      organization,
-      experience,
-      elderly,
-      targets,
+      email,
+      status,
+      experience: defaultExperience,
     });
 
     return NextResponse.json({
@@ -52,56 +47,8 @@ export async function GET(req) {
   }
 }
 
-async function sendEmail(fullname, email, formData) {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "elderlywellness2024@gmail.com",
-      pass: "45rtfgyrrt",
-    },
-  });
-
-  // Construct the email body with all the form data
-  const emailBody = `
-    Dear ${fullname},
-    
-    Your message has been received successfully. Below are the details you provided:
-    
-    Full Name: ${fullname}
-    Email: ${email}
-    Phone: ${formData.phone}
-    Gender: ${formData.gender}
-    Age: ${formData.age}
-    Degree: ${formData.degree}
-    Designation: ${formData.designation}
-    Organization: ${formData.organization}
-    Experience: ${formData.experience}
-    Elderly: ${formData.elderly}
-    Targets: ${formData.targets}
-    
-    We will get back to you shortly.
-    
-    Regards,
-    The Team
-  `;
-
-  const mailOptions = {
-    from: "elderlywellness2024@gmail.com",
-    to: "elderlywellness2024@gmail.com", // Send email to the provided email address
-    subject: "Message sent successfully",
-    text: emailBody,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully.");
-  } catch (error) {
-    console.error("Error sending email:", error);
-  }
-}
-
 export async function PUT(req) {
-  const { id, fullname, phone, email, gender, age, degree, designation, organization, experience, elderly, targets } = await req.json();
+  const { id, fullname, phone, email, status, experience } = await req.json();
 
   try {
     await connectDB();
@@ -117,14 +64,8 @@ export async function PUT(req) {
     existingContact.fullname = fullname;
     existingContact.phone = phone;
     existingContact.email = email;
-    existingContact.gender = gender;
-    existingContact.age = age;
-    existingContact.degree = degree;
-    existingContact.designation = designation;
-    existingContact.organization = organization;
+    existingContact.status = status;
     existingContact.experience = experience;
-    existingContact.elderly = elderly;
-    existingContact.targets = targets;
 
     await existingContact.save();
 

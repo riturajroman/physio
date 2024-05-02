@@ -21,44 +21,18 @@ const contactSchema = new Schema({
     match: [/^[\w.%+-]+@[\w.-]+\.[A-Za-z]{2,}$/i, "Invalid email address"],
   },
 
-  gender: {
+  status: {
     type: String,
-    required: [true, "Gender is required."],
-  },
-
-  age: {
-    type: Number,
-    required: [true, "Age is required."],
-  },
-
-  degree: {
-    type: String,
-    required: [true, "Education Degree is required."],
-  },
-
-  designation: {
-    type: String,
-    required: [true, "Current Designation is required."],
-  },
-
-  organization: {
-    type: String,
-    required: [true, "Current Organization & Address is required."],
+    required: [true, "Status is required."],
+    enum: ["Studying", "Working"], // Enumerate the possible values
+    default: "Studying", // Default value
   },
 
   experience: {
     type: String,
-    required: [true, "Total Experience is required."],
-  },
-
-  elderly: {
-    type: String,
-    required: [true, "Willingness to work with Elderly is required."],
-  },
-
-  targets: {
-    type: String,
-    required: [true, "Monthly targets are required."],
+    required: function () {
+      return this.status === "Working"; // Required only if status is "Working"
+    },
   },
 
   date: {
@@ -67,7 +41,7 @@ const contactSchema = new Schema({
   },
 });
 
-
-const Contact = mongoose.models.Contact || mongoose.model("Contact", contactSchema);
+const Contact =
+  mongoose.models.Contact || mongoose.model("Contact", contactSchema);
 
 export default Contact;

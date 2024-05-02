@@ -6,14 +6,8 @@ export default function ContactForm() {
     const [fullname, setFullname] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
-    const [gender, setGender] = useState("");
-    const [age, setAge] = useState("");
-    const [degree, setDegree] = useState("");
-    const [designation, setDesignation] = useState("");
-    const [organization, setOrganization] = useState("");
+    const [status, setStatus] = useState("Studying"); // Dropdown default value
     const [experience, setExperience] = useState("");
-    const [elderly, setElderly] = useState("");
-    const [targets, setTargets] = useState("");
     const [error, setError] = useState([]);
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -25,14 +19,8 @@ export default function ContactForm() {
         console.log("Full name: ", fullname);
         console.log("Phone: ", phone);
         console.log("Email: ", email);
-        console.log("Gender: ", gender);
-        console.log("Age: ", age);
-        console.log("Degree: ", degree);
-        console.log("Designation: ", designation);
-        console.log("Organization: ", organization);
+        console.log("Status: ", status);
         console.log("Experience: ", experience);
-        console.log("Elderly: ", elderly);
-        console.log("Targets: ", targets);
 
         const res = await fetch("api/contact", {
             method: "POST",
@@ -43,14 +31,8 @@ export default function ContactForm() {
                 fullname,
                 phone,
                 email,
-                gender,
-                age,
-                degree,
-                designation,
-                organization,
+                status,
                 experience,
-                elderly,
-                targets,
             }),
         });
 
@@ -63,14 +45,8 @@ export default function ContactForm() {
             setFullname("");
             setPhone("");
             setEmail("");
-            setGender("");
-            setAge("");
-            setDegree("");
-            setDesignation("");
-            setOrganization("");
+            setStatus("Studying");
             setExperience("");
-            setElderly("");
-            setTargets("");
         }
     };
 
@@ -78,7 +54,7 @@ export default function ContactForm() {
         <>
             <form
                 onSubmit={handleSubmit}
-                className="py-4 mt-4 border-t gap-5 grid grid-cols-2"
+                className="py-4 mt-4 border-t gap-5 grid grid-cols-1 sm:grid-cols-2"
             >
                 <div>
                     <label htmlFor="fullname">Full Name*</label>
@@ -89,6 +65,7 @@ export default function ContactForm() {
                         id="fullname"
                         placeholder="John Doe"
                         required
+                        className="block w-full mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                     />
                 </div>
 
@@ -101,6 +78,7 @@ export default function ContactForm() {
                         id="phone"
                         placeholder="Phone number"
                         required
+                        className="block w-full mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                     />
                 </div>
 
@@ -113,108 +91,42 @@ export default function ContactForm() {
                         id="email"
                         placeholder="john@gmail.com"
                         required
+                        className="block w-full mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                     />
                 </div>
 
                 <div>
-                    <label htmlFor="gender">Gender*</label>
-                    <input
-                        onChange={(e) => setGender(e.target.value)}
-                        value={gender}
-                        type="text"
-                        id="gender"
-                        placeholder="Gender"
+                    <label htmlFor="status">Select*</label>
+                    <select
+                        onChange={(e) => setStatus(e.target.value)}
+                        value={status}
+                        id="status"
+                        className="block w-full mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                         required
-                    />
+                    >
+                        <option value="Studying">Studying</option>
+                        <option value="Working">Working</option>
+                    </select>
                 </div>
 
-                <div>
-                    <label htmlFor="age">Age*</label>
-                    <input
-                        onChange={(e) => setAge(e.target.value)}
-                        value={age}
-                        type="number"
-                        id="age"
-                        placeholder="Age"
-                        required
-                    />
-                </div>
+                {status === "Working" && (
+                    <div>
+                        <label htmlFor="experience">Experience (optional)</label>
+                        <input
+                            onChange={(e) => setExperience(e.target.value)}
+                            value={experience}
+                            type="text"
+                            id="experience"
+                            placeholder="Experience in years"
+                            className="block w-full mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                        />
+                    </div>
+                )}
 
-                <div>
-                    <label htmlFor="degree">Education Degree*</label>
-                    <input
-                        onChange={(e) => setDegree(e.target.value)}
-                        value={degree}
-                        type="text"
-                        id="degree"
-                        placeholder="Education Degree"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="designation">Current Designation*</label>
-                    <input
-                        onChange={(e) => setDesignation(e.target.value)}
-                        value={designation}
-                        type="text"
-                        id="designation"
-                        placeholder="Current Designation"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="organization">Current Organization & Address*</label>
-                    <input
-                        onChange={(e) => setOrganization(e.target.value)}
-                        value={organization}
-                        type="text"
-                        id="organization"
-                        placeholder="Current Organization & Address"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="experience">Total Experience*</label>
-                    <input
-                        onChange={(e) => setExperience(e.target.value)}
-                        value={experience}
-                        type="text"
-                        id="experience"
-                        placeholder="Total Experience"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="elderly">Willing work with Elderly ?*</label>
-                    <input
-                        onChange={(e) => setElderly(e.target.value)}
-                        value={elderly}
-                        type="text"
-                        id="elderly"
-                        placeholder="Yes/No"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="targets">Monthly targets?*</label>
-                    <input
-                        onChange={(e) => setTargets(e.target.value)}
-                        value={targets}
-                        type="text"
-                        id="targets"
-                        placeholder="Monthly targets"
-                        required
-                    />
-                </div>
-
-                <button className="bg-green-700 p-3 text-white font-bold" type="submit" disabled={loading}>
+                <button className="bg-green-700 p-3 text-white font-bold hover:bg-green-900" type="submit" disabled={loading}>
                     {loading ? "Sending..." : "Send"}
                 </button>
+
             </form>
 
             {loading && <div className="loader">Loading...</div>}
