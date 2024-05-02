@@ -29,7 +29,7 @@ export async function POST(req) {
     });
 
     return NextResponse.json({
-      msg: ["Message sent successfully"],
+      msg: ["Saved successfully"],
       success: true,
     });
   } catch (error) {

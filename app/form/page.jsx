@@ -124,7 +124,7 @@ export default function ContactForm() {
                 )}
 
                 <button className="bg-green-700 p-3 text-white font-bold hover:bg-green-900" type="submit" disabled={loading}>
-                    {loading ? "Sending..." : "Send"}
+                    {loading ? "Submiting..." : "Submit"}
                 </button>
 
             </form>

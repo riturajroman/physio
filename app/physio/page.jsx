@@ -98,7 +98,7 @@ const PhysioFetch = () => {
     return (
         <div className="container mx-auto p-5">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-0">
-                <h1 className="text-2xl sm:text-3xl font-semibold mb-4 text-center mt-3 sm:mt-5">Physio Form Data</h1>
+                <h1 className="text-2xl sm:text-3xl font-semibold mb-4 text-center mt-3 sm:mt-5">Elderly Form Data</h1>
                 <Link href="/" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded'>Registration Form</Link>
             </div>
             <div className="mb-4">
